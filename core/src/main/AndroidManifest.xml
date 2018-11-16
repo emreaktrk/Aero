@@ -1,0 +1,11 @@
+<manifest
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        package="com.kocsistem.aero.core">
+
+    <application>
+        <provider android:name=".InitProvider"
+                  android:authorities="${applicationId}.provider"
+                  android:enabled="true"
+                  android:exported="false"/>
+    </application>
+</manifest>
