@@ -6,6 +6,8 @@ open class NullResponseError : VolleyError("Nothing to parse because response ne
 
 open class NullDataError : VolleyError("Body is null")
 
-open class BodyParseError : VolleyError("Body does not have a valid json format")
+open class BodyParseError : VolleyError("Body does not have a valid json format or type does not match with response")
 
 open class CharsetError : VolleyError("There is charset error")
+
+open class ContextError : VolleyError("Context is null, Unable to queue. Call with IO#create(context)")
