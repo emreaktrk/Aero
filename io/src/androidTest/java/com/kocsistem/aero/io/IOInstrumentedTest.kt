@@ -24,14 +24,14 @@ class IOInstrumentedTest {
     @Test
     fun get() {
         val latch = CountDownLatch(1)
-
-        val request = GsonRequestBuilder<User>()
+        val request = ParserRequestBuilder<User>()
             .asType(object : TypeToken<User>() {})
-            .url("https://jsonplaceholder.typicode.com/todos/1")
             .methodType(MethodType.GET)
+            .url("https://jsonplaceholder.typicode.com/todos/1")
             .successListener(Response.Listener { latch.countDown() })
             .errorListener(Response.ErrorListener { latch.countDown() })
             .build()
+
 
         mQueue.add(request)
         latch.await()

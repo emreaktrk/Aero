@@ -8,7 +8,7 @@ import com.google.gson.reflect.TypeToken
 import java.io.UnsupportedEncodingException
 import java.nio.charset.Charset
 
-class GsonRequest<T>(private val builder: GsonRequestBuilder<T>) :
+class ParserRequest<T>(private val builder: ParserRequestBuilder<T>) :
     BaseRequest<T>(
         builder.methodType,
         builder.url,
@@ -17,7 +17,6 @@ class GsonRequest<T>(private val builder: GsonRequestBuilder<T>) :
     ) {
 
     override fun parseNetworkResponse(response: NetworkResponse?): Response<T> {
-
         if (response != null) {
             if (response.data != null) {
                 return try {
@@ -42,7 +41,7 @@ class GsonRequest<T>(private val builder: GsonRequestBuilder<T>) :
     }
 }
 
-class GsonRequestBuilder<T> : RequestBuilder<T>() {
+class ParserRequestBuilder<T> : RequestBuilder<T>() {
 
     var parser: Parser<*>? = null
 
@@ -52,25 +51,31 @@ class GsonRequestBuilder<T> : RequestBuilder<T>() {
         return this
     }
 
-    fun asJsonArray(): GsonRequestBuilder<T> {
+    fun asJsonArray(): RequestBuilder<T> {
         this.parser = JSONArrayParser()
 
         return this
     }
 
-    fun asRaw(): GsonRequestBuilder<T> {
+    fun asRaw(): ParserRequestBuilder<T> {
         this.parser = RawParser()
 
         return this
     }
 
-    fun asType(token: TypeToken<*>): GsonRequestBuilder<T> {
+    fun asClass(clazz: Class<T>): ParserRequestBuilder<T> {
+        this.parser = GsonParser(clazz)
+
+        return this
+    }
+
+    fun asType(token: TypeToken<T>): ParserRequestBuilder<T> {
         this.parser = GsonParser(token)
 
         return this
     }
 
     override fun build(): BaseRequest<T> {
-        return GsonRequest(this)
+        return ParserRequest(this)
     }
 }

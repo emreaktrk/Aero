@@ -19,35 +19,34 @@ abstract class BaseRequest<T>(
 
 abstract class RequestBuilder<T> {
 
-    var methodType: Int = MethodType.DEPRECATED_GET_OR_POST
-    var url: String? = null
-    var successListener: Response.Listener<T>? = null
-    var errorListener: Response.ErrorListener? = null
+    internal var methodType: Int = MethodType.DEPRECATED_GET_OR_POST
+    internal var url: String? = null
+    internal var successListener: Response.Listener<T>? = null
+    internal var errorListener: Response.ErrorListener? = null
 
-    open fun methodType(@MethodType methodType: Int): RequestBuilder<T> {
+    fun methodType(@MethodType methodType: Int): RequestBuilder<T> {
         this.methodType = methodType
 
         return this
     }
 
-    open fun url(url: String): RequestBuilder<T> {
+    fun url(url: String): RequestBuilder<T> {
         this.url = url
 
         return this
     }
 
-    open fun successListener(successListener: Response.Listener<T>?): RequestBuilder<T> {
+    fun successListener(successListener: Response.Listener<T>?): RequestBuilder<T> {
         this.successListener = successListener
 
         return this
     }
 
-    open fun errorListener(errorListener: Response.ErrorListener): RequestBuilder<T> {
+    fun errorListener(errorListener: Response.ErrorListener): RequestBuilder<T> {
         this.errorListener = errorListener
 
         return this
     }
-
 
     abstract fun build(): BaseRequest<T>
 }

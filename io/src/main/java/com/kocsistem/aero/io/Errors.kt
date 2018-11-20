@@ -10,4 +10,4 @@ open class BodyParseError : VolleyError("Body does not have a valid json format 
 
 open class CharsetError : VolleyError("There is charset error")
 
-open class ContextError : VolleyError("Context is null, Unable to queue. Call with IO#create(context)")
+open class ContextError : VolleyError("Context is null")

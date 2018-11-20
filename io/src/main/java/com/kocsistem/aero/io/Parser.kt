@@ -40,7 +40,17 @@ class JSONArrayParser : Parser<JSONArray?>() {
     }
 }
 
-class GsonParser<T>(private val token: TypeToken<T>) : Parser<T?>() {
+class GsonParser<T> : Parser<T?> {
+
+    private val token: TypeToken<T>
+
+    constructor(token: TypeToken<T>) : super() {
+        this.token = token
+    }
+
+    constructor(clazz: Class<T>) : super() {
+        this.token = TypeToken.get(clazz)
+    }
 
     @Throws(JsonParseException::class)
     override fun parse(body: String?): T? {
