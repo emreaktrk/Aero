@@ -1,32 +1,32 @@
+@file:Suppress("UNCHECKED_CAST")
+
 package com.kocsistem.aero.io
 
 import com.android.volley.NetworkResponse
 import com.android.volley.Response
 import com.android.volley.toolbox.HttpHeaderParser
 import com.google.gson.JsonParseException
-import com.google.gson.reflect.TypeToken
 import java.io.UnsupportedEncodingException
 import java.nio.charset.Charset
 
-class ParserRequest<T>(private val builder: ParserRequestBuilder<T>) :
-    BaseRequest<T>(
+class ParserRequest(private val builder: ParserRequestBuilder) :
+    BaseRequest(
         builder.methodType,
         builder.url,
-        builder.successListener,
-        builder.errorListener
+        builder.answer.successListener as Response.Listener<Any>?,
+        builder.answer.errorListener
     ) {
 
-    override fun parseNetworkResponse(response: NetworkResponse?): Response<T> {
+    override fun parseNetworkResponse(response: NetworkResponse?): Response<Any> {
         if (response != null) {
             if (response.data != null) {
                 return try {
                     val charset = HttpHeaderParser.parseCharset(response.headers)
                     val headers = HttpHeaderParser.parseCacheHeaders(response)
                     val json = String(response.data, Charset.forName(charset))
-                    val result = builder.parser!!.parse(json)
+                    val result = builder.answer.parser.parse(json)
 
-                    @Suppress("UNCHECKED_CAST")
-                    Response.success(result as T, headers)
+                    Response.success(result, headers)
                 } catch (e: JsonParseException) {
                     Response.error(BodyParseError())
                 } catch (e: UnsupportedEncodingException) {
@@ -41,41 +41,21 @@ class ParserRequest<T>(private val builder: ParserRequestBuilder<T>) :
     }
 }
 
-class ParserRequestBuilder<T> : RequestBuilder<T>() {
+class ParserRequestBuilder : RequestBuilder() {
 
-    var parser: Parser<*>? = null
-
-    fun asJsonObject(): RequestBuilder<T> {
-        this.parser = JSONArrayParser()
+    override fun methodType(methodType: Int): ParserRequestBuilder {
+        super.methodType(methodType)
 
         return this
     }
 
-    fun asJsonArray(): RequestBuilder<T> {
-        this.parser = JSONArrayParser()
+    override fun url(url: String): ParserRequestBuilder {
+        super.url(url)
 
         return this
     }
 
-    fun asRaw(): ParserRequestBuilder<T> {
-        this.parser = RawParser()
-
-        return this
-    }
-
-    fun asClass(clazz: Class<T>): ParserRequestBuilder<T> {
-        this.parser = GsonParser(clazz)
-
-        return this
-    }
-
-    fun asType(token: TypeToken<T>): ParserRequestBuilder<T> {
-        this.parser = GsonParser(token)
-
-        return this
-    }
-
-    override fun build(): BaseRequest<T> {
+    override fun build(): BaseRequest {
         return ParserRequest(this)
     }
 }
