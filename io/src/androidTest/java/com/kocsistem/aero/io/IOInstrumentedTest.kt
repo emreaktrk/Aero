@@ -1,10 +1,12 @@
 package com.kocsistem.aero.io
 
+import android.content.Context
 import android.support.test.runner.AndroidJUnit4
 import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.Volley
 import com.kocsistem.aero.core.InitProvider
+import com.koushikdutta.ion.Ion
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -27,6 +29,7 @@ class IOInstrumentedTest {
         RequestBuilder
             .create(MethodType.GET, "https://jsonplaceholder.typicode.com")
             .addPath("todos", "1")
+            .setBody(JsonPojoBody(""))
             .asJsonObject()
             .successListener(Response.Listener { latch.countDown() })
             .errorListener(Response.ErrorListener { latch.countDown() })
