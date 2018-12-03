@@ -18,6 +18,17 @@ class RawParser : Parser<String?>() {
     }
 }
 
+class BinaryParser : Parser<ByteArray?>() {
+
+    override fun parse(body: String?): ByteArray? {
+        body?.let {
+            return it.toByteArray()
+        }
+
+        return null
+    }
+}
+
 class JSONObjectParser : Parser<JSONObject?>() {
 
     override fun parse(body: String?): JSONObject? {

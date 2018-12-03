@@ -5,7 +5,7 @@ import com.android.volley.Response
 
 class Answer<T>(val parser: Parser<*>, private val builder: RequestBuilder) {
 
-    var successListener: Response.Listener<*>? = null
+    var successListener: Response.Listener<T>? = null
     var errorListener: Response.ErrorListener? = null
 
     fun successListener(successListener: Response.Listener<T>?): Answer<T> {
