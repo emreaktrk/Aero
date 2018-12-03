@@ -24,14 +24,15 @@ class IOInstrumentedTest {
     @Test
     fun get() {
         val latch = CountDownLatch(1)
-        RequestBuilder()
-            .methodType(MethodType.GET)
-            .url("https://jsonplaceholder.typicode.com/todos/1")
-            .asBinary()
+        RequestBuilder
+            .create(MethodType.GET, "https://jsonplaceholder.typicode.com")
+            .addPath("todos", "1")
+            .asJsonObject()
             .successListener(Response.Listener { latch.countDown() })
             .errorListener(Response.ErrorListener { latch.countDown() })
             .async(mQueue)
 
         latch.await()
+
     }
 }

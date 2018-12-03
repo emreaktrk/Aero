@@ -15,7 +15,7 @@ import java.nio.charset.Charset
 class ParserRequest(private val builder: RequestBuilder) :
     GenericRequest(
         builder.methodType,
-        builder.url,
+        builder.link.toString(),
         builder.answer.successListener as Response.Listener<Any>?,
         builder.answer.errorListener
     ) {
@@ -47,17 +47,44 @@ class ParserRequest(private val builder: RequestBuilder) :
 class RequestBuilder {
 
     internal var methodType: Int = MethodType.DEPRECATED_GET_OR_POST
-    internal var url: String? = null
+    internal lateinit var link: Link
     internal lateinit var answer: Answer<*>
+    internal var payload: Payload? = null
 
-    fun methodType(@MethodType methodType: Int): RequestBuilder {
+    companion object {
+        fun create(@MethodType methodType: Int, url: String): RequestBuilder {
+            return RequestBuilder()
+                .methodType(methodType)
+                .url(url)
+        }
+    }
+
+    private fun methodType(@MethodType methodType: Int): RequestBuilder {
         this.methodType = methodType
 
         return this
     }
 
-    fun url(url: String): RequestBuilder {
-        this.url = url
+    private fun url(url: String): RequestBuilder {
+        this.link = Link(url)
+
+        return this
+    }
+
+    fun addQueryParameter(key: String, value: String): RequestBuilder {
+        this.link.uri.appendQueryParameter(key, value)
+
+        return this
+    }
+
+    fun addPath(path: String): RequestBuilder {
+        this.link.uri.appendPath(path)
+
+        return this
+    }
+
+    fun addPath(path: String, value: String): RequestBuilder {
+        this.link.uri.appendPath(path).appendPath(value)
 
         return this
     }
