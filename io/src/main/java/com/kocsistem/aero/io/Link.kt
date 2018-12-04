@@ -1,6 +1,7 @@
 package com.kocsistem.aero.io
 
 import android.net.Uri
+import com.google.gson.reflect.TypeToken
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -84,6 +85,30 @@ class Link(val url: String) {
 
     fun setMultipart(parts: Map<String, Multipart.DataPart>): Multipart {
         return Multipart(this, parts)
+    }
+
+    fun asRaw(): RawParser {
+        return RawParser(NothingPayload(this))
+    }
+
+    fun asBinary(): BinaryParser {
+        return BinaryParser(NothingPayload(this))
+    }
+
+    fun asJSONArray(): JSONArrayParser {
+        return JSONArrayParser(NothingPayload(this))
+    }
+
+    fun asJSONObject(): JSONObjectParser {
+        return JSONObjectParser(NothingPayload(this))
+    }
+
+    fun <T> asClass(clazz: Class<T>): GsonParser<T> {
+        return GsonParser(NothingPayload(this), clazz)
+    }
+
+    fun <T> asType(token: TypeToken<T>): GsonParser<T> {
+        return GsonParser(NothingPayload(this), token)
     }
 
     override fun toString(): String {

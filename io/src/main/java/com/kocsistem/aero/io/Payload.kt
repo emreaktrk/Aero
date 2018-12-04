@@ -22,6 +22,10 @@ abstract class Payload<T>(val link: Link) {
         return BinaryParser(this)
     }
 
+    fun asJSONArray(): JSONArrayParser {
+        return JSONArrayParser(this)
+    }
+
     fun asJSONObject(): JSONObjectParser {
         return JSONObjectParser(this)
     }
@@ -32,6 +36,16 @@ abstract class Payload<T>(val link: Link) {
 
     fun <T> asType(token: TypeToken<T>): GsonParser<T> {
         return GsonParser(this, token)
+    }
+}
+
+class NothingPayload(link: Link) : Payload<Nothing?>(link) {
+    override fun body(): Nothing? {
+        return null
+    }
+
+    override fun contentType(): String? {
+        return null
     }
 }
 

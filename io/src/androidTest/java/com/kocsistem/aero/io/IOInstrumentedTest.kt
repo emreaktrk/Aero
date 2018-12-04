@@ -22,14 +22,47 @@ class IOInstrumentedTest {
     }
 
     @Test
-    fun get() {
+    fun todos() {
         val latch = CountDownLatch(1)
         IO
             .create("https://jsonplaceholder.typicode.com")
-            .methodType(MethodType.GET)
             .addPath("todos", "1")
-            .setJsonPojoBody("")
             .asType(object : TypeToken<User>() {})
+            .answer()
+            .successListener(Response.Listener { latch.countDown() })
+            .errorListener(Response.ErrorListener { latch.countDown() })
+            .transform()
+            .async(mQueue)
+
+        latch.await()
+    }
+
+    @Test
+    fun photos() {
+        val latch = CountDownLatch(1)
+        IO
+            .create("https://jsonplaceholder.typicode.com")
+            .addPath("albums", "1")
+            .addPath("photos")
+            .asJSONArray()
+            .answer()
+            .successListener(Response.Listener { latch.countDown() })
+            .errorListener(Response.ErrorListener { latch.countDown() })
+            .transform()
+            .async(mQueue)
+
+        latch.await()
+    }
+
+    @Test
+    fun post() {
+        val latch = CountDownLatch(1)
+        IO
+            .create("https://jsonplaceholder.typicode.com")
+            .addPath("posts")
+            .methodType(MethodType.POST)
+            .setJsonPojoBody(Post("foo", "boo", 1))
+            .asJSONObject()
             .answer()
             .successListener(Response.Listener { latch.countDown() })
             .errorListener(Response.ErrorListener { latch.countDown() })
