@@ -17,6 +17,18 @@ class GenericRequest(private val transformation: Transformation) :
         transformation.answer.errorListener
     ) {
 
+    override fun getHeaders(): MutableMap<String, String> {
+        return transformation.answer.parser.payload.link.headers
+    }
+
+    override fun getBodyContentType(): String {
+        transformation.answer.parser.payload.contentType?.let {
+            return "$it; charset=$paramsEncoding"
+        }
+
+        return super.getBodyContentType()
+    }
+
     override fun parseNetworkResponse(response: NetworkResponse?): Response<Any> {
         if (response != null) {
             if (response.data != null) {

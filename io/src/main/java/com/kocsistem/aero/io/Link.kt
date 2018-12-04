@@ -7,10 +7,43 @@ import org.json.JSONObject
 class Link(val url: String) {
 
     internal var methodType: Int = MethodType.DEPRECATED_GET_OR_POST
+        private set
     internal val uri: Uri.Builder = Uri.Builder()
+    internal var headers: MutableMap<String, String> = mutableMapOf()
+        private set
 
     fun methodType(@MethodType methodType: Int): Link {
         this.methodType = methodType
+
+        return this
+    }
+
+    fun addHeader(header: Header): Link {
+        this.headers.plus(header)
+
+        return this
+    }
+
+    fun addHeaders(headers: Map<String, String>): Link {
+        this.headers.plus(headers)
+
+        return this
+    }
+
+    fun addHeaders(headers: Collection<Header>): Link {
+        this.headers.plus(headers)
+
+        return this
+    }
+
+    fun setHeaders(headers: MutableMap<String, String>): Link {
+        this.headers = headers
+
+        return this
+    }
+
+    fun setHeaders(headers: Collection<Header>): Link {
+        this.headers = headers.toMap().toMutableMap()
 
         return this
     }
@@ -57,3 +90,5 @@ class Link(val url: String) {
         return url + uri.build().toString()
     }
 }
+
+typealias Header = Pair<String, String>
