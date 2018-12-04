@@ -6,19 +6,23 @@ import com.google.gson.reflect.TypeToken
 import org.json.JSONArray
 import org.json.JSONObject
 
-abstract class Parser<T> {
+abstract class Parser<T>(val payload: Payload<*>) {
 
     abstract fun parse(body: String?): T
+
+    fun answer(): Answer<T> {
+        return Answer(this)
+    }
 }
 
-class RawParser : Parser<String?>() {
+class RawParser(body: Payload<*>) : Parser<String?>(body) {
 
     override fun parse(body: String?): String? {
         return body
     }
 }
 
-class BinaryParser : Parser<ByteArray?>() {
+class BinaryParser(body: Payload<*>) : Parser<ByteArray?>(body) {
 
     override fun parse(body: String?): ByteArray? {
         body?.let {
@@ -29,7 +33,7 @@ class BinaryParser : Parser<ByteArray?>() {
     }
 }
 
-class JSONObjectParser : Parser<JSONObject?>() {
+class JSONObjectParser(body: Payload<*>) : Parser<JSONObject?>(body) {
 
     override fun parse(body: String?): JSONObject? {
         body?.let {
@@ -40,7 +44,7 @@ class JSONObjectParser : Parser<JSONObject?>() {
     }
 }
 
-class JSONArrayParser : Parser<JSONArray?>() {
+class JSONArrayParser(body: Payload<*>) : Parser<JSONArray?>(body) {
 
     override fun parse(body: String?): JSONArray? {
         body?.let {
@@ -55,11 +59,11 @@ class GsonParser<T> : Parser<T?> {
 
     private val token: TypeToken<T>
 
-    constructor(token: TypeToken<T>) : super() {
+    constructor(body: Payload<*>, token: TypeToken<T>) : super(body) {
         this.token = token
     }
 
-    constructor(clazz: Class<T>) : super() {
+    constructor(body: Payload<*>, clazz: Class<T>) : super(body) {
         this.token = TypeToken.get(clazz)
     }
 

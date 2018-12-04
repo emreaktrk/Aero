@@ -1,9 +1,8 @@
 package com.kocsistem.aero.io
 
-import com.android.volley.RequestQueue
 import com.android.volley.Response
 
-class Answer<T>(val parser: Parser<*>, private val builder: RequestBuilder) {
+class Answer<T>(val parser: Parser<*>) {
 
     var successListener: Response.Listener<T>? = null
     var errorListener: Response.ErrorListener? = null
@@ -20,11 +19,7 @@ class Answer<T>(val parser: Parser<*>, private val builder: RequestBuilder) {
         return this
     }
 
-    fun async(queue: RequestQueue) {
-        queue.add(builder.build())
-    }
-
-    fun sync() {
-
+    fun transform(): Transformation {
+        return Transformation(this)
     }
 }
