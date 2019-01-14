@@ -4,15 +4,15 @@ import android.support.annotation.IntDef
 
 @Retention(AnnotationRetention.SOURCE)
 @IntDef(
-    MethodType.DEPRECATED_GET_OR_POST,
-    MethodType.GET,
-    MethodType.POST,
-    MethodType.PUT,
-    MethodType.DELETE,
-    MethodType.HEAD,
-    MethodType.OPTIONS,
-    MethodType.TRACE,
-    MethodType.PATCH
+        MethodType.DEPRECATED_GET_OR_POST,
+        MethodType.GET,
+        MethodType.POST,
+        MethodType.PUT,
+        MethodType.DELETE,
+        MethodType.HEAD,
+        MethodType.OPTIONS,
+        MethodType.TRACE,
+        MethodType.PATCH
 )
 annotation class MethodType {
     companion object {

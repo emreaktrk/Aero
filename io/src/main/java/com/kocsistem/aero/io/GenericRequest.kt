@@ -10,12 +10,12 @@ import java.io.UnsupportedEncodingException
 import java.nio.charset.Charset
 
 class GenericRequest(private val transformation: Transformation) :
-    BaseRequest(
-        transformation.answer.parser.payload.link.methodType,
-        transformation.answer.parser.payload.link.toString(),
-        transformation.answer.successListener as Response.Listener<Any>?,
-        transformation.answer.errorListener
-    ) {
+        BaseRequest(
+                transformation.answer.parser.payload.link.methodType,
+                transformation.answer.parser.payload.link.toString(),
+                transformation.answer.successListener as Response.Listener<Any>?,
+                transformation.answer.errorListener
+        ) {
 
     override fun getHeaders(): MutableMap<String, String> {
         return transformation.answer.parser.payload.link.headers

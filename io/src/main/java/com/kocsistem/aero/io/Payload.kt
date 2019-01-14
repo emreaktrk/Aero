@@ -83,7 +83,7 @@ class JsonArrayBody(link: Link, private val array: JSONArray) : JsonBody(link) {
 
 class FormData(link: Link, form: Map<String, String>) : Payload<Map<String, String>>(link) {
     override fun body(): Map<String, String> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented") //To change body of created functions use File | Settings | File  Templates.
     }
 
     override fun contentType(): String? {
@@ -108,7 +108,7 @@ class Multipart(link: Link, parts: Map<String, DataPart>) : Payload<Map<String, 
     }
 
     override fun contentType(): String? {
-        return null
+        return "multipart/form-data"
     }
 
     inner class DataPart
